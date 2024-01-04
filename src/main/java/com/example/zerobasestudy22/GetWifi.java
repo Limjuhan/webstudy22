@@ -15,8 +15,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetWifi {
     static int totalCnt;
@@ -63,6 +66,7 @@ public class GetWifi {
     public void getData() throws ParseException, SQLException, ClassNotFoundException {
         WifiInfoService service = new WifiInfoService();
         service.deleteWifi();
+        List<WifiInfo> wifiList = new ArrayList<>();
 
         int start = 0;
         int end = 0;
@@ -131,9 +135,26 @@ public class GetWifi {
                 LocalDateTime work_dttm = LocalDateTime.parse(time,sFormat);
 
                 WifiInfo info = new WifiInfo(mgr_no,wrdofc,main_nm,adres1,adres2,instl_ty,instl_mby,svc_se,cmcwr,cnstc_year,inout_door,lat,lnt,work_dttm);
-                service.register(info);
+                wifiList.add(info);
 
             }
         }
+        service.register(wifiList);
     }
 }
+//    WifiInfo wifiInfo = new WifiInfo();
+//
+//                wifiInfo.setMgr_no(mgr_no);
+//                        wifiInfo.setWrdofc(wrdofc);
+//                        wifiInfo.setMain_nm(main_nm);
+//                        wifiInfo.setAdres1(adres1);
+//                        wifiInfo.setAdres2(adres2);
+//                        wifiInfo.setInstl_ty(instl_ty);
+//                        wifiInfo.setInstl_mby(instl_mby);
+//                        wifiInfo.setSvc_se(svc_se);
+//                        wifiInfo.setCmcwr(cmcwr);
+//                        wifiInfo.setCnstc_year(cnstc_year);
+//                        wifiInfo.setInout_door(inout_door);
+//                        wifiInfo.setLat(lat);
+//                        wifiInfo.setLnt(lnt);
+//                        wifiInfo.setWork_dttm(work_dttm);

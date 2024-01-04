@@ -6,7 +6,8 @@ import java.util.List;
 import static java.lang.Class.forName;
 
 public class WifiInfoService {
-    public boolean register(WifiInfo info) throws SQLException, ClassNotFoundException {
+    static int count;
+    public String register(List<WifiInfo> wifiList) throws SQLException, ClassNotFoundException {
 
 //        String url = "jdbc:mariadb://localhost:3306/db1";
 //        String userName = "root";
@@ -24,30 +25,30 @@ public class WifiInfoService {
                 "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,info.getMgr_no());
-        preparedStatement.setString(2,info.getWrdofc());
-        preparedStatement.setString(3,info.getMain_nm());
-        preparedStatement.setString(4,info.getAdres1());
-        preparedStatement.setString(5,info.getAdres2());
-        preparedStatement.setString(6,info.getInstl_ty());
-        preparedStatement.setString(7,info.getInstl_mby());
-        preparedStatement.setString(8,info.getSvc_se());
-        preparedStatement.setString(9,info.getCmcwr());
-        preparedStatement.setString(10,info.getCnstc_year());
-        preparedStatement.setString(11,info.getInout_door());
-        preparedStatement.setString(12,info.getLat());
-        preparedStatement.setString(13,info.getLnt());
-        preparedStatement.setTimestamp(14,Timestamp.valueOf(info.getWork_dttm()));
+        for (WifiInfo pInfo : wifiList) {
+            preparedStatement.setString(1, pInfo.getMgr_no());
+            preparedStatement.setString(2, pInfo.getWrdofc());
+            preparedStatement.setString(3, pInfo.getMain_nm());
+            preparedStatement.setString(4, pInfo.getAdres1());
+            preparedStatement.setString(5, pInfo.getAdres2());
+            preparedStatement.setString(6, pInfo.getInstl_ty());
+            preparedStatement.setString(7, pInfo.getInstl_mby());
+            preparedStatement.setString(8, pInfo.getSvc_se());
+            preparedStatement.setString(9, pInfo.getCmcwr());
+            preparedStatement.setString(10, pInfo.getCnstc_year());
+            preparedStatement.setString(11, pInfo.getInout_door());
+            preparedStatement.setString(12, pInfo.getLat());
+            preparedStatement.setString(13, pInfo.getLnt());
+            preparedStatement.setTimestamp(14, Timestamp.valueOf(pInfo.getWork_dttm()));
 
 
-        int affected = preparedStatement.executeUpdate();
+            int affected = preparedStatement.executeUpdate();
+            count++;
+        }
 
         connection.close();
-        if (affected > 0) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return String.valueOf(count);
 
     }
 

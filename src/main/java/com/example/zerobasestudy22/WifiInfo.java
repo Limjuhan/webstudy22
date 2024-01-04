@@ -18,6 +18,9 @@ public class WifiInfo {
     private String lnt;
     private LocalDateTime work_dttm;
 
+    public WifiInfo() {
+
+    }
     public WifiInfo(String mgr_no, String wrdofc, String main_nm, String adres1, String adres2, String instl_ty, String instl_mby, String svc_se, String cmcwr, String cnstc_year, String inout_door, String lat, String lnt, LocalDateTime work_dttm) {
         this.mgr_no = mgr_no;
         this.wrdofc = wrdofc;

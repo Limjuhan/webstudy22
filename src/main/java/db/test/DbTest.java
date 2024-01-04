@@ -22,9 +22,9 @@ public class DbTest {
         rs = statement.executeQuery(sql);
 
         while (rs.next()) {
-            String id = rs.getString("id");
-            String name = rs.getString("name");
-            String pwd = rs.getString("password");
+            String id = rs.getString("USER_ID");
+            String name = rs.getString("NAME");
+            String pwd = rs.getString("PWD");
             System.out.println(id + " " + name + " " + pwd);
 
 
@@ -79,7 +79,7 @@ public class DbTest {
         Connection connection = DriverManager.getConnection(url, userName, password);
 
 
-        String sql = "insert into member (id, name, password) values (?,?,?)";
+        String sql = "insert into member (USER_ID, NAME, PWD) values (?,?,?)";
 
         preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1,idIn);
