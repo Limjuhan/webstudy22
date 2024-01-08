@@ -4,8 +4,8 @@
 <head>
     <title>JSP - Hello World</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css"/>
-
+    <link rel="stylesheet" href="css/style.css?after"/>
+<%--    <script src="js/index.js"/>--%>
 </head>
 <body>
 <h1>와이파이 정보 구하기</h1>
@@ -24,14 +24,14 @@
 </header>
 <main>
     <section>
-        LAT:<input type="text">,
-        LNT:<input type="text">
-        <button>내 위치 가져오기</button>
+        LAT:<input type="text" id="inputLat">,
+        LNT:<input type="text" id="inputLnt">
+        <button id="getPositionButton">내 위치 가져오기</button>
         <button>근처WIPI정보 보기</button>
     </section>
     <section>
-        <table border="1">
-            <tr bgcolor="#90ee90">
+        <table>
+            <tr>
             <th>거리</th>
             <th>관리번호</th>
             <th>자치구</th>
@@ -51,43 +51,9 @@
             <th>작업일자</th>
             </tr>
             <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
+                <td colspan='17' align="center">위치 정보를 입력한 후에 조회해 주세요.</td>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-            </tr>
+
         </table>
     </section>
 </main>
