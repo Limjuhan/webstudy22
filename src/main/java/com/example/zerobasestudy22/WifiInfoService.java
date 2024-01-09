@@ -1,30 +1,31 @@
 package com.example.zerobasestudy22;
 import org.mariadb.jdbc.Connection;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Class.forName;
 
 public class WifiInfoService {
     static int count;
-    public String register(List<WifiInfo> wifiList) throws SQLException, ClassNotFoundException {
 
-//        String url = "jdbc:mariadb://localhost:3306/db1";
-//        String userName = "root";
-//        String password = "1234";
+    public String register(List<WifiInfo> wifiList) throws SQLException, ClassNotFoundException {
 
         Statement statement = null;
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
 
         Class.forName("org.mariadb.jdbc.Driver");
-        Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1","root","1234");
+        Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1", "root", "1234");
 
 
         String sql = "insert into wifi (mgr_no,wrdofc,main_nm,adres1,adres2,instl_ty,instl_mby,svc_se,cmcwr,cnstc_year,inout_door,lat,lnt,work_dttm) " +
                 "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         preparedStatement = connection.prepareStatement(sql);
+
         for (WifiInfo pInfo : wifiList) {
             preparedStatement.setString(1, pInfo.getMgr_no());
             preparedStatement.setString(2, pInfo.getWrdofc());
@@ -53,16 +54,11 @@ public class WifiInfoService {
     }
 
     public void deleteWifi() throws SQLException, ClassNotFoundException {
-//        String url = "jdbc:mariadb://localhost:3306/db1";
-//        String userName = "root";
-//        String password = "1234";
 
         Statement statement = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
 
         Class.forName("org.mariadb.jdbc.Driver");
-        Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1","root","1234");
+        Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1", "root", "1234");
         statement = connection.createStatement();
 
         String sql = "delete from wifi ";
@@ -79,11 +75,85 @@ public class WifiInfoService {
 
     }
 
-    public List<WifiInfo> getList() {
+    public List<WifiInfo> getList(String myLat, String myLnt) throws ClassNotFoundException, SQLException {
+        List<WifiInfo> list = new ArrayList<>();
+        DateTimeFormatter sFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        Statement statement = null;
+        Class.forName("org.mariadb.jdbc.Driver");
+        Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1", "root", "1234");
+        statement = connection.createStatement();
 
-        return null;
+        String sql = "select * from wifi";
+
+        ResultSet rs = statement.executeQuery(sql);
+
+        while (rs.next()) {
+            double distance = Double.parseDouble(rs.getString("distance"));
+            String mgr_no = rs.getString("mgr_no");
+            String wrdofc = rs.getString("wrdofc");
+            String main_nm = rs.getString("main_nm");
+            String adres1 = rs.getString("adres1");
+            String adres2 = rs.getString("adres2");
+            String instl_ty = rs.getString("instl_ty");
+            String instl_mby = rs.getString("instl_mby");
+            String svc_se = rs.getString("svc_se");
+            String cmcwr = rs.getString("cmcwr");
+            String cnstc_year = rs.getString("cnstc_year");
+            String inout_door = rs.getString("inout_door");
+            String lat = rs.getString("lat");
+            String lnt = rs.getString("lnt");
+            LocalDateTime work_dttm = LocalDateTime.parse(rs.getString("work_dttm"), sFormat);
+
+            WifiInfo info = new WifiInfo(distance, mgr_no, wrdofc, main_nm, adres1, adres2, instl_ty, instl_mby, svc_se, cmcwr, cnstc_year, inout_door, lat, lnt, work_dttm);
+            list.add(info);
+        }
+        connection.close();
+
+        for (WifiInfo info : list) {
+            distance(myLat, myLnt, info.getLat(), info.getLnt());
+        }
+
+
+
+
+        return list;
+    }
+
+    public double distance(String myLat, String myLnt, String lat, String lnt) {
+        double dMyLat = Double.parseDouble(myLat);
+        double dMyLnt = Double.parseDouble(myLnt);
+        double dLat = Double.parseDouble(lat);
+        double dLnt = Double.parseDouble(lnt);
+
+
+        double theta = dMyLnt - dLnt;
+        double dist = Math.sin(deg2rad(dMyLat)) * Math.sin(deg2rad(dLat)) + Math.cos(deg2rad(dMyLat)) * Math.cos(deg2rad(dLat)) * Math.cos(deg2rad(theta));
+
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+
+//        if (unit == "kilometer") {
+//            dist = dist * 1.609344;
+//        } else if (unit == "meter") {
+//            dist = dist * 1609.344;
+//        }
+        dist = dist * 1.609344;//kilometer
+
+        return Math.round(dist * 10000) / 10000.0;
+
+    }
+
+    // This function converts decimal degrees to radians
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    // This function converts radians to decimal degrees
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
     }
 
 
-
 }
+

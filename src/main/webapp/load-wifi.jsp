@@ -27,5 +27,6 @@
 
 <h1 ><%=total%>개의 WIFI정보를 정상적으로 저장하였습니다.</h1>
 <a href="#" onclick="location.href='index.jsp'">홈으로가기</a>
+
 </body>
 </html>

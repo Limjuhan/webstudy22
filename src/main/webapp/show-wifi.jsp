@@ -1,3 +1,7 @@
+<%@ page import="com.example.zerobasestudy22.WifiInfoService" %>
+<%@ page import="com.example.zerobasestudy22.WifiInfo" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -8,6 +12,16 @@
     <script type="text/javascript" src="js/index.js"></script>
 </head>
 <body>
+<%
+    String lat = request.getParameter("inputLat");
+    String lnt = request.getParameter("inputLnt");
+    List<WifiInfo> wifiList = new ArrayList<>();
+
+    WifiInfoService service = new WifiInfoService();
+    wifiList = service.getList(lat, lnt);
+
+
+%>
 <h1>와이파이 정보 구하기</h1>
 <br/>
 <!-- header-->
@@ -24,17 +38,14 @@
 </header>
 <main>
     <section>
-        <form action="show-wifi.jsp" method="get">
-
-            LAT:<input type="text" id="inputLat" name="inputLat">,
-            LNT:<input type="text" id="inputLnt" name="inputLnt">
-            <button type="button" id="getPositionButton">내 위치 가져오기</button>
-            <button type="submit" id="nearWifi">근처WIPI정보 보기</button>
-
-        </form>
+        LAT:<input type="text" id="inputLat">,
+        LNT:<input type="text" id="inputLnt">
+        <button id="getPositionButton">내 위치 가져오기</button>
+        <button>근처WIPI정보 보기</button>
     </section>
     <section>
         <table>
+            <thead>
             <tr>
             <th>거리</th>
             <th>관리번호</th>
@@ -54,10 +65,13 @@
             <th>Y좌표</th>
             <th>작업일자</th>
             </tr>
+            </thead>
+            <tbody>
             <tr>
-                <td colspan='17' align="center">위치 정보를 입력한 후에 조회해 주세요.</td>
+                <%  %>
+                <td> </td>
             </tr>
-
+            </tbody>
         </table>
     </section>
 </main>

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class GetWifi {
     static int totalCnt;
-    public int getCount() throws ParseException, SQLException {
+    public int getCount() throws ParseException {
         String key = "6e616e764c7374613535704d437466";
 
         URL url = null;
@@ -142,19 +142,3 @@ public class GetWifi {
         service.register(wifiList);
     }
 }
-//    WifiInfo wifiInfo = new WifiInfo();
-//
-//                wifiInfo.setMgr_no(mgr_no);
-//                        wifiInfo.setWrdofc(wrdofc);
-//                        wifiInfo.setMain_nm(main_nm);
-//                        wifiInfo.setAdres1(adres1);
-//                        wifiInfo.setAdres2(adres2);
-//                        wifiInfo.setInstl_ty(instl_ty);
-//                        wifiInfo.setInstl_mby(instl_mby);
-//                        wifiInfo.setSvc_se(svc_se);
-//                        wifiInfo.setCmcwr(cmcwr);
-//                        wifiInfo.setCnstc_year(cnstc_year);
-//                        wifiInfo.setInout_door(inout_door);
-//                        wifiInfo.setLat(lat);
-//                        wifiInfo.setLnt(lnt);
-//                        wifiInfo.setWork_dttm(work_dttm);

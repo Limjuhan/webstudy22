@@ -3,6 +3,8 @@ package com.example.zerobasestudy22;
 import java.time.LocalDateTime;
 
 public class WifiInfo {
+
+    private double distance;
     private String mgr_no;
     private String wrdofc;
     private String main_nm;
@@ -22,6 +24,7 @@ public class WifiInfo {
 
     }
     public WifiInfo(String mgr_no, String wrdofc, String main_nm, String adres1, String adres2, String instl_ty, String instl_mby, String svc_se, String cmcwr, String cnstc_year, String inout_door, String lat, String lnt, LocalDateTime work_dttm) {
+
         this.mgr_no = mgr_no;
         this.wrdofc = wrdofc;
         this.main_nm = main_nm;
@@ -36,6 +39,35 @@ public class WifiInfo {
         this.lat = lat;
         this.lnt = lnt;
         this.work_dttm = work_dttm;
+
+    }
+
+    public WifiInfo(double distance, String mgr_no, String wrdofc, String main_nm, String adres1, String adres2, String instl_ty, String instl_mby, String svc_se, String cmcwr, String cnstc_year, String inout_door, String lat, String lnt, LocalDateTime work_dttm) {
+
+        this.distance = distance;
+        this.mgr_no = mgr_no;
+        this.wrdofc = wrdofc;
+        this.main_nm = main_nm;
+        this.adres1 = adres1;
+        this.adres2 = adres2;
+        this.instl_ty = instl_ty;
+        this.instl_mby = instl_mby;
+        this.svc_se = svc_se;
+        this.cmcwr = cmcwr;
+        this.cnstc_year = cnstc_year;
+        this.inout_door = inout_door;
+        this.lat = lat;
+        this.lnt = lnt;
+        this.work_dttm = work_dttm;
+
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     public String getMgr_no() {
