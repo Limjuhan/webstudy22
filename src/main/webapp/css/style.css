@@ -13,3 +13,8 @@ table, th, td {
     border-collapse: collapse;
 }
 
+section {
+    margin-bottom: 10px;
+}
+
+

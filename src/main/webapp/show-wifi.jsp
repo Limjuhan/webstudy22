@@ -15,10 +15,10 @@
 <%
     String lat = request.getParameter("inputLat");
     String lnt = request.getParameter("inputLnt");
-    List<WifiInfo> wifiList = new ArrayList<>();
+
 
     WifiInfoService service = new WifiInfoService();
-    wifiList = service.getList(lat, lnt);
+    List<WifiInfo> wifiList = service.getList(lat, lnt);
 
 
 %>
@@ -68,9 +68,27 @@
             </thead>
             <tbody>
             <tr>
-                <%  %>
-                <td> </td>
-            </tr>
+                <% for (WifiInfo list: wifiList) {
+                    out.write("<tr>");
+                    out.write("<td>" + list.getDistance() + "</td>");
+                    out.write("<td>" + list.getMgr_no() + "</td>");
+                    out.write("<td>" + list.getWrdofc() + "</td>");
+                    out.write("<td>" + list.getMain_nm() + "</td>");
+                    out.write("<td>" + list.getAdres1() + "</td>");
+                    out.write("<td>" + list.getAdres2() + "</td>");
+                    out.write("<td>" + list.getInstl_ty() + "</td>");
+                    out.write("<td>" + "</td>");
+                    out.write("<td>" + list.getInstl_mby() + "</td>");
+                    out.write("<td>" + list.getSvc_se() + "</td>");
+                    out.write("<td>" + list.getCmcwr() + "</td>");
+                    out.write("<td>" + list.getCnstc_year() + "</td>");
+                    out.write("<td>" + list.getInout_door() + "</td>");
+                    out.write("<td>"  + "</td>");
+                    out.write("<td>" + list.getLat() + "</td>");
+                    out.write("<td>" + list.getLnt() + "</td>");
+                    out.write("<td>" + list.getWork_dttm() + "</td>");
+                    out.write("</tr>");
+                }%>
             </tbody>
         </table>
     </section>

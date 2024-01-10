@@ -4,7 +4,7 @@
 <head>
     <title>JSP - Hello World</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css?after"/>
+    <link rel="stylesheet" href="css/style.css?"/>
     <script type="text/javascript" src="js/index.js"></script>
 </head>
 <body>
@@ -26,8 +26,8 @@
     <section>
         <form action="show-wifi.jsp" method="get">
 
-            LAT:<input type="text" id="inputLat" name="inputLat">,
-            LNT:<input type="text" id="inputLnt" name="inputLnt">
+            LAT: <input type="text" id="inputLat" name="inputLat">,
+            LNT: <input type="text" id="inputLnt" name="inputLnt">
             <button type="button" id="getPositionButton">내 위치 가져오기</button>
             <button type="submit" id="nearWifi">근처WIPI정보 보기</button>
 

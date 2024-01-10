@@ -1,6 +1,8 @@
 package com.example.zerobasestudy22;
 import org.mariadb.jdbc.Connection;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,10 +14,7 @@ public class WifiInfoService {
     static int count;
 
     public String register(List<WifiInfo> wifiList) throws SQLException, ClassNotFoundException {
-
-        Statement statement = null;
         PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
 
         Class.forName("org.mariadb.jdbc.Driver");
         Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1", "root", "1234");
@@ -75,9 +74,11 @@ public class WifiInfoService {
 
     }
 
-    public List<WifiInfo> getList(String myLat, String myLnt) throws ClassNotFoundException, SQLException {
+    public List<WifiInfo> getList(String myLat, String myLnt) throws ClassNotFoundException, SQLException, ParseException {
         List<WifiInfo> list = new ArrayList<>();
-        DateTimeFormatter sFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
         Statement statement = null;
         Class.forName("org.mariadb.jdbc.Driver");
         Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1", "root", "1234");
@@ -86,6 +87,86 @@ public class WifiInfoService {
         String sql = "select * from wifi";
 
         ResultSet rs = statement.executeQuery(sql);
+
+        while (rs.next()) {
+            //double distance = Double.parseDouble(rs.getString("distance"));
+            String mgr_no = rs.getString("mgr_no");
+            String wrdofc = rs.getString("wrdofc");
+            String main_nm = rs.getString("main_nm");
+            String adres1 = rs.getString("adres1");
+            String adres2 = rs.getString("adres2");
+            String instl_ty = rs.getString("instl_ty");
+            String instl_mby = rs.getString("instl_mby");
+            String svc_se = rs.getString("svc_se");
+            String cmcwr = rs.getString("cmcwr");
+            String cnstc_year = rs.getString("cnstc_year");
+            String inout_door = rs.getString("inout_door");
+            String lat = rs.getString("lat");
+            String lnt = rs.getString("lnt");
+            LocalDateTime work_dttm = LocalDateTime.parse(rs.getString("work_dttm"), formatter);
+
+            WifiInfo info = new WifiInfo(mgr_no, wrdofc, main_nm, adres1, adres2, instl_ty, instl_mby, svc_se, cmcwr, cnstc_year, inout_door, lat, lnt, work_dttm);
+            list.add(info);
+        }
+        connection.close();
+
+        for (WifiInfo info : list) {
+            //내좌표, DB로우들 비교하여 거리계산
+            double distance = calDistance(myLat, myLnt, info.getLat(), info.getLnt());
+            info.setDistance(distance);
+            //거리칼럼 DB에 업데이트
+            if (distance < 2.0) {
+                updateDistance(info.getMgr_no(), distance);
+            }
+        }
+
+        //가까운 상위20개 wifi리스트 조회.
+        List<WifiInfo> nearWifiList = nearWifiList();
+
+
+        return nearWifiList;
+    }
+    public void updateDistance(String mgr_no, double distance) throws ClassNotFoundException, SQLException {
+
+        PreparedStatement preparedStatement = null;
+
+        Class.forName("org.mariadb.jdbc.Driver");
+        Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1", "root", "1234");
+
+
+        String sql = "update wifi\n" +
+                     "set distance = ?\n" +
+                     "where mgr_no = ?"
+                     ;
+
+        preparedStatement = connection.prepareStatement(sql);
+
+        preparedStatement.setDouble(1, distance);
+        preparedStatement.setString(2, mgr_no);
+
+        int affected = preparedStatement.executeUpdate();
+
+
+        connection.close();
+    }
+
+    public List<WifiInfo> nearWifiList() throws ClassNotFoundException, SQLException {
+        List<WifiInfo> nearWifiList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        Statement statement = null;
+        Class.forName("org.mariadb.jdbc.Driver");
+        Connection connection = (Connection) DriverManager.getConnection("jdbc:mariadb://localhost:3306/db1", "root", "1234");
+        statement = connection.createStatement();
+
+        String sql = "select *\n" +
+                "from wifi\n" +
+                "where distance is not null\n" +
+                "order by distance\n" +
+                "limit 20";
+
+        ResultSet rs = statement.executeQuery(sql);
+
 
         while (rs.next()) {
             double distance = Double.parseDouble(rs.getString("distance"));
@@ -102,24 +183,19 @@ public class WifiInfoService {
             String inout_door = rs.getString("inout_door");
             String lat = rs.getString("lat");
             String lnt = rs.getString("lnt");
-            LocalDateTime work_dttm = LocalDateTime.parse(rs.getString("work_dttm"), sFormat);
+            LocalDateTime work_dttm = LocalDateTime.parse(rs.getString("work_dttm"), formatter);
 
             WifiInfo info = new WifiInfo(distance, mgr_no, wrdofc, main_nm, adres1, adres2, instl_ty, instl_mby, svc_se, cmcwr, cnstc_year, inout_door, lat, lnt, work_dttm);
-            list.add(info);
+            nearWifiList.add(info);
         }
+
         connection.close();
 
-        for (WifiInfo info : list) {
-            distance(myLat, myLnt, info.getLat(), info.getLnt());
-        }
-
-
-
-
-        return list;
+        return nearWifiList;
     }
 
-    public double distance(String myLat, String myLnt, String lat, String lnt) {
+
+    public double calDistance(String myLat, String myLnt, String lat, String lnt) {
         double dMyLat = Double.parseDouble(myLat);
         double dMyLnt = Double.parseDouble(myLnt);
         double dLat = Double.parseDouble(lat);

@@ -23,6 +23,8 @@
     int total = g.getCount();
     g.getData();
 
+
+
 %>
 
 <h1 ><%=total%>개의 WIFI정보를 정상적으로 저장하였습니다.</h1>
