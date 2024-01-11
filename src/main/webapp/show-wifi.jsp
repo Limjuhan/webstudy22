@@ -2,6 +2,7 @@
 <%@ page import="com.example.zerobasestudy22.WifiInfo" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.example.zerobasestudy22.HistoryService" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -18,6 +19,10 @@
 
 
     WifiInfoService service = new WifiInfoService();
+    HistoryService historyService = new HistoryService();
+    historyService.insertHistory(lat, lnt);
+
+
     List<WifiInfo> wifiList = service.getList(lat, lnt);
 
 

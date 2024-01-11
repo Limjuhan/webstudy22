@@ -8,8 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Class.forName;
-
 public class WifiInfoService {
     static int count;
 
