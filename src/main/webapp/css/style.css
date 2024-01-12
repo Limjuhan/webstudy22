@@ -28,7 +28,7 @@ table {
 }
 
 #removeHistory {
-    width: 100px;
+    width: auto;
     margin: auto;
     display: block;
 }

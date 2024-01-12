@@ -37,7 +37,6 @@
 				out.write("</tr>");
 			}%>
 		</tr>
-
 	</table>
 </section>
 </body>
